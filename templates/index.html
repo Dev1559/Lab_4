@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fish Market Predictor</title>
+    <script>
+        async function predictWeight() {
+            let species = document.getElementById("species").value;
+            let length1 = document.getElementById("length1").value;
+            let length2 = document.getElementById("length2").value;
+            let length3 = document.getElementById("length3").value;
+            let height = document.getElementById("height").value;
+            let width = document.getElementById("width").value;
+            
+            let data = {
+                "Species": parseInt(species),
+                "Length1": parseFloat(length1),
+                "Length2": parseFloat(length2),
+                "Length3": parseFloat(length3),
+                "Height": parseFloat(height),
+                "Width": parseFloat(width)
+            };
+            
+            let response = await fetch("http://127.0.0.1:5000/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+            
+            let result = await response.json();
+            document.getElementById("result").innerText = "Predicted Weight: " + result["Predicted Weight"] + " grams";
+        }
+    </script>
+</head>
+<body>
+    <h2>Fish Market Prediction</h2>
+    <label>Species (Encoded Number):</label> <input type="number" id="species"><br>
+    <label>Length1:</label> <input type="number" step="any" id="length1"><br>
+    <label>Length2:</label> <input type="number" step="any" id="length2"><br>
+    <label>Length3:</label> <input type="number" step="any" id="length3"><br>
+    <label>Height:</label> <input type="number" step="any" id="height"><br>
+    <label>Width:</label> <input type="number" step="any" id="width"><br>
+    <button onclick="predictWeight()">Predict Weight</button>
+    <h3 id="result"></h3>
+</body>
+</html>
